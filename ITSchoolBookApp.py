@@ -10,8 +10,6 @@ def add_book():
 
 
 def list_books():
-    import csv  # importing csv library
-    with open("BooksDB.csv", mode="r") as file:
     print("Available books are:")
 
 
