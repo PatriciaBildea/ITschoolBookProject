@@ -5,12 +5,19 @@ def add_book():
     import csv  # importing csv library
     with open("BooksDB.csv", "w") as file:
         writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead"])
-        writer.writerow({"BookTitle": book_title, "BookAuthor": book_author})
+        writer.writerow({"BookTitle": book_title, "BookAuthor": book_author, "SharedWith": "Nobody", "IsRead": "No"})
     print(f"Book '{book_title}' by {book_author} was added successfully!")
 
 
 def list_books():
-    print("Available books are:")
+    import csv
+    with open("BooksDB.csv", mode="r") as file:
+        list_of_books = csv.DictReader(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead"])  # takes all from DB
+        print("Available books are: ")
+        index = 0
+        for title in list_of_books:
+            index += 1
+            print(f'''{index}. {title["BookTitle"]} by {title["BookAuthor"]}. Shared with: {title["SharedWith"]}. Book read: {title["IsRead"]}''')
 
 
 def update_book():
