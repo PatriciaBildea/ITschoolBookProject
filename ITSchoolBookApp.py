@@ -3,7 +3,7 @@ def add_book():
     book_author = input("Add book author --> ")
 
     import csv  # importing csv library
-    with open("BooksDB.csv", mode="w") as file:
+    with open("BooksDB.csv", "w") as file:
         writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead"])
         writer.writerow({"BookTitle": book_title, "BookAuthor": book_author})
     print(f"Book '{book_title}' by {book_author} was added successfully!")
@@ -19,7 +19,7 @@ def update_book():
 
 def share_book():
     print("Share a book")
-    
+
 
 # Main menu for user
 option = int(input('''Menu:
