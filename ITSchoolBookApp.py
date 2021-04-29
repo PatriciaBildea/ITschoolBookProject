@@ -43,10 +43,14 @@ Would you like to add this book? Y/N --> ''')
                         writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead"])
                         writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"),
 "SharedWith": book.get("SharedWith"), "IsRead": read})
-                    print(f"Book {title} was updated successfully!")
-                break
-
-
+                else:
+                    read = "No"
+                    with open("BooksDB.csv", mode="w") as file:
+                        writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead"])
+                        writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"),
+                                         "SharedWith": book.get("SharedWith"), "IsRead": read})
+                print(f"Book {title} was updated successfully!")
+            break
 
 
 def share_book():
