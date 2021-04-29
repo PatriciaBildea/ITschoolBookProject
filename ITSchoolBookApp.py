@@ -37,7 +37,7 @@ Would you like to add this book? Y/N --> ''')
                     print("Good bye!")
             else:
                 read = input(f"Did you read {title}? Y/N --> ")
-                if read == "Y":
+                if read == "Y" or read == "y":
                     read = "Yes"
                     with open("BooksDB.csv", mode="w") as file:
                         writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead"])
