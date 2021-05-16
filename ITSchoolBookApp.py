@@ -168,17 +168,16 @@ def book_review():
                                 wrong_choice = False
                         if read == "Y":
                             read = "Read"
-                            review = input(f"What did you think of {title}? (Type 'R' to return to main menu) --> ").upper()
-                            if review != "R":
-                                with open("BooksDB.csv", mode="a") as file:
-                                    writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
-                                    writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": book.get("SharedWith"), "IsRead": read, "Review": review})
-                                print(f"Review successfully added for {title}")
+                            review = input(f"What did you think of {title}? --> ").upper()
+                            with open("BooksDB.csv", mode="a") as file:
+                                writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
+                                writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": book.get("SharedWith"), "IsRead": read, "Review": review})
+                            print(f"Review successfully added for {title}")
                         elif read == "N":
                             print('''You can't leave a review for a book that is not read. 
 Please select a different option''')
                 else:
-                    with open("BooksDB.csv", mode="w") as file:
+                    with open("BooksDB.csv", mode="a") as file:
                         writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead",
                                                                   "Review"])
                         writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"),
