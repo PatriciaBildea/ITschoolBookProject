@@ -88,12 +88,23 @@ Would you like to add this book? Y/N (Type 'R' to return to main menu) --> ''').
                             wrong_choice = True
                             print("That is not a valid option")
                         elif add == "Y":
-                            add_book()
-                            break
+                            wrong_choice = False
+                            book_title = title
+                            book_author = input("Add book author (Type 'R' to return to main menu) --> ").upper()
+                            if book_author != "R":
+                                with open("BooksDB.csv", mode="a") as file:
+                                    writer = csv.DictWriter(file,
+                                                            fieldnames=["BookTitle", "BookAuthor", "SharedWith",
+                                                                        "IsRead",
+                                                                        "Review"])
+                                    writer.writerow(
+                                        {"BookTitle": book_title, "BookAuthor": book_author, "SharedWith": "",
+                                         "IsRead": "Not read", "Review": "No review added"})
+                                print(f"Book '{book_title}' by {book_author} was added successfully!")
                         else:
-                            return
+                            wrong_choice = False
                     else:
-                        return
+                        wrong_choice = False
 
 
 def share_book():
@@ -131,13 +142,21 @@ Would you like to add this book? Y/N (Type 'R' to return to main menu) --> ''').
                         wrong_choice = True
                         print("That is not a valid option")
                     elif add == "Y":
-                        add_book()
-                        break
+                        wrong_choice = False
+                        book_title = title
+                        book_author = input("Add book author (Type 'R' to return to main menu) --> ").upper()
+                        if book_author != "R":
+                            with open("BooksDB.csv", mode="a") as file:
+                                writer = csv.DictWriter(file,
+                                                        fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead",
+                                                                    "Review"])
+                                writer.writerow({"BookTitle": book_title, "BookAuthor": book_author, "SharedWith": "",
+                                                 "IsRead": "Not read", "Review": "No review added"})
+                            print(f"Book '{book_title}' by {book_author} was added successfully!")
                     else:
                         wrong_choice = False
                 else:
                     wrong_choice = False
-
 
 def book_review():
     title = input("What book are you looking for today? (Type 'R' to return to main menu) --> ").upper()
@@ -192,8 +211,17 @@ Would you like to add this book? Y/N (Type 'R' to return to main menu) --> ''').
                         wrong_choice = True
                         print("That is not a valid option")
                     elif add == "Y":
-                        add_book()
-                        break
+                        wrong_choice = False
+                        book_title = title
+                        book_author = input("Add book author (Type 'R' to return to main menu) --> ").upper()
+                        if book_author != "R":
+                            with open("BooksDB.csv", mode="a") as file:
+                                writer = csv.DictWriter(file,
+                                                        fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead",
+                                                                    "Review"])
+                                writer.writerow({"BookTitle": book_title, "BookAuthor": book_author, "SharedWith": "",
+                                                 "IsRead": "Not read", "Review": "No review added"})
+                            print(f"Book '{book_title}' by {book_author} was added successfully!")
                     else:
                         wrong_choice = False
                 else:
