@@ -35,17 +35,49 @@ def list_books():
 
 def update_book():
     title = input("What book are you looking to update today? (Type 'R' to return to main menu) --> ").upper()
-    book_not_present = True  # used to check for book in list
     if title != "R":
+        book_not_present = True # used to check if book is in the list
         import csv
         with open("BooksDB.csv", mode="r") as file:
-            list_of_books = csv.DictReader(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
+            list_of_books = list(csv.DictReader(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"]))
+            delete = open("BooksDB.csv", mode="w+")
+            delete.truncate()  # clears the CSV
             for book in list_of_books:
                 if book.get("BookTitle") == title:
                     book_not_present = False
-                    break
+                    wrong_choice = True
+                    read = ""
+                    while wrong_choice:
+                        read = input(f"Did you read {title}? Y/N --> ").upper()
+                        if read != "Y" and read != "N":
+                            wrong_choice = True
+                            print("That is not a valid option")
+                        else:
+                            wrong_choice = False
+                    if read == "Y":
+                        read = "Read"
+                        with open("BooksDB.csv", mode="a") as file:
+                            writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead",
+                                                                      "Review"])
+                            writer.writerow(
+                                {"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"),
+                                 "SharedWith": book.get("SharedWith"), "IsRead": read, "Review": book.get("Review")})
+                    elif read == "N":
+                        read = "Not read"
+                        with open("BooksDB.csv", mode="a") as file:
+                            writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead",
+                                                                      "Review"])
+                            writer.writerow(
+                                {"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"),
+                                 "SharedWith": book.get("SharedWith"), "IsRead": read, "Review": book.get("Review")})
+                    print(f"Book {title} was updated successfully!")
                 else:
-                    book_not_present = True
+                    with open("BooksDB.csv", mode="a") as file:
+                        writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead",
+                                                                  "Review"])
+                        writer.writerow(
+                            {"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"),
+                             "SharedWith": book.get("SharedWith"), "IsRead": book.get("IsRead"), "Review": book.get("Review")})
             if book_not_present:
                 wrong_choice = True
                 while wrong_choice:
@@ -62,32 +94,6 @@ Would you like to add this book? Y/N (Type 'R' to return to main menu) --> ''').
                             return
                     else:
                         return
-            else:
-                wrong_choice = True
-                read = ""
-                while wrong_choice:
-                    read = input(f"Did you read {title}? Y/N (Type 'R' to return to main menu) --> ").upper()
-                    if read != "R":
-                        if read != "Y" and read != "N":
-                            wrong_choice = True
-                            print("That is not a valid option")
-                        else:
-                            wrong_choice = False
-                    else:
-                        wrong_choice = False
-                if read == "Y":
-                    read = "Read"
-                    with open("BooksDB.csv", mode="w") as file:
-                        writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
-                        writer.writerow(
-                        {"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": book.get("SharedWith"), "IsRead": read, "Review": book.get("Review")})
-                elif read == "N":
-                    read = "Not read"
-                    with open("BooksDB.csv", mode="w") as file:
-                        writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
-                        writer.writerow(
-                        {"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": book.get("SharedWith"), "IsRead": read, "Review": book.get("Review")})
-                print(f"Book {title} was updated successfully!")
 
 
 def share_book():
@@ -96,22 +102,25 @@ def share_book():
         book_not_present = True
         import csv
         with open("BooksDB.csv", mode="r") as file:
-            list_of_books = csv.DictReader(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
+            list_of_books = list(csv.DictReader(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"]))
+            delete = open("BooksDB.csv", mode="w+")
+            delete.truncate()  # clears the CSV
             for book in list_of_books:
                 if book.get("BookTitle") == title:
-                    new_share = input(f"Who would you like to share {title} with? (Type 'R' to return to main menu) --> ").upper()
-                    if new_share != "R":
-                        shared_with = book.get("SharedWith") + new_share + ", "
-                        with open("BooksDB.csv", mode="w") as file:
-                            writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
-                            writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": shared_with, "IsRead": book.get("IsRead"), "Review": book.get("Review")})
-                            print(f"{title} is now shared with {shared_with}")
-                            book_not_present = False
-                            break
-                    else:
-                        return
+                    new_share = input(f"Who would you like to share {title} with? --> ").upper()
+                    shared_with = book.get("SharedWith") + new_share + ", "
+                    with open("BooksDB.csv", mode="a") as file:
+                        writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
+                        writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": shared_with, "IsRead": book.get("IsRead"), "Review": book.get("Review")})
+                        print(f"{title} is now shared with {shared_with}")
+                        book_not_present = False
                 else:
-                    book_not_present = True
+                    with open("BooksDB.csv", mode="a") as file:
+                        writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead",
+                                                                  "Review"])
+                        writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"),
+                                         "SharedWith": book.get("SharedWith"), "IsRead": book.get("IsRead"),
+                                         "Review": book.get("Review")})
         if book_not_present:
             wrong_choice = True
             while wrong_choice:
@@ -135,46 +144,45 @@ def book_review():
     if title != "R":
         import csv
         with open("BooksDB.csv", mode="r") as file:
-            list_of_books = csv.DictReader(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
+            list_of_books = list(csv.DictReader(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"]))
+            delete = open("BooksDB.csv", mode="w+")
+            delete.truncate()  # clears the CSV
             book_not_present = True
             for book in list_of_books:
                 if book.get("BookTitle") == title:
                     book_not_present = False
                     if book.get("IsRead") == "Read":
-                        review = input(f"What did you think of {title}? (Type 'R' to return to main menu) --> ").upper()
-                        if review != "R":
-                            with open("BooksDB.csv", mode="w") as file:
-                                writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
-                                writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": book.get("SharedWith"), "IsRead": book.get("IsRead"), "Review": review})
-                                print(f"Review successfully added for {title}")
-                        else:
-                            return
+                        review = input(f"What did you think of {title}? --> ").upper()
+                        with open("BooksDB.csv", mode="a") as file:
+                            writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
+                            writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": book.get("SharedWith"), "IsRead": book.get("IsRead"), "Review": review})
+                            print(f"Review successfully added for {title}")
                     else:
                         wrong_choice = True
                         while wrong_choice:
-                            read = input(f"Did you read {title}? Y/N (Type 'R' to return to main menu) --> ").upper()
-                            if read != "R":
-                                if read != "Y" and read != "N":
-                                    wrong_choice = True
-                                    print("That is not a valid option")
-                                else:
-                                    wrong_choice = False
+                            read = input(f"Did you read {title}? Y/N --> ").upper()
+                            if read != "Y" and read != "N":
+                                wrong_choice = True
+                                print("That is not a valid option")
                             else:
                                 wrong_choice = False
                         if read == "Y":
                             read = "Read"
                             review = input(f"What did you think of {title}? (Type 'R' to return to main menu) --> ").upper()
                             if review != "R":
-                                with open("BooksDB.csv", mode="w") as file:
+                                with open("BooksDB.csv", mode="a") as file:
                                     writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead", "Review"])
                                     writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"), "SharedWith": book.get("SharedWith"), "IsRead": read, "Review": review})
                                 print(f"Review successfully added for {title}")
                         elif read == "N":
                             print('''You can't leave a review for a book that is not read. 
 Please select a different option''')
-                    break
                 else:
-                    book_not_present = True
+                    with open("BooksDB.csv", mode="w") as file:
+                        writer = csv.DictWriter(file, fieldnames=["BookTitle", "BookAuthor", "SharedWith", "IsRead",
+                                                                  "Review"])
+                        writer.writerow({"BookTitle": book.get("BookTitle"), "BookAuthor": book.get("BookAuthor"),
+                                         "SharedWith": book.get("SharedWith"), "IsRead": book.get("IsRead"), "Review": book.get("Review")})
         if book_not_present:
             wrong_choice = True
             while wrong_choice:
